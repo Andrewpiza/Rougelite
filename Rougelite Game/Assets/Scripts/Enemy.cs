@@ -12,8 +12,8 @@ public class Enemy : Entity
     // Update is called once per frame
     void Update()
     {
-
-        Vector3 targetPos = (Vector2.one+target.GetComponent<Rigidbody2D>().linearVelocity.normalized) * target.transform.position;
+        Vector2 targetVelocity =target.GetComponent<Rigidbody2D>().linearVelocity.normalized;
+        Vector3 targetPos = new Vector3(targetVelocity.x,targetVelocity.y,0) + target.transform.position;
         Move((targetPos-transform.position).normalized);
     }
 }
