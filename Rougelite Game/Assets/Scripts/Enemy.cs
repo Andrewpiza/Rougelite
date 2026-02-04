@@ -13,7 +13,7 @@ public class Enemy : Entity
     // Update is called once per frame
     void Update()
     {
-        if (target)FollowTarget();
+        if (target)FollowTarget(target);
         else
         {
             foreach (GameObject entity in GameObject.FindGameObjectsWithTag("Entity"))
@@ -26,10 +26,5 @@ public class Enemy : Entity
         }
     }
 
-    public void FollowTarget()
-    {
-        Vector2 targetVelocity =target.GetComponent<Rigidbody2D>().linearVelocity.normalized;
-        Vector3 targetPos = new Vector3(targetVelocity.x,targetVelocity.y,0) + target.transform.position;
-        Move((targetPos-transform.position).normalized);
-    }
+    
 }

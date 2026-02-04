@@ -9,6 +9,11 @@ public class Entity : MonoBehaviour
     [Header("Movement")]
     [SerializeField]protected float speed = 1000; 
     [SerializeField]protected float maxSpeed = 10; 
+
+    [Header("Attack")]
+    [SerializeField]protected float attackDamage = 1;
+    [SerializeField]protected float attackRate = 1;
+
     protected Rigidbody2D rb;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -16,12 +21,6 @@ public class Entity : MonoBehaviour
     {
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void Move(Vector2 dir)
@@ -32,5 +31,17 @@ public class Entity : MonoBehaviour
         {
             rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
         }
+    }
+
+    public void MoveTo(Vector3 pos)
+    {
+        Move((pos-transform.position).normalized);
+    }
+
+    public void FollowTarget(GameObject target)
+    {
+        Vector2 targetVelocity =target.GetComponent<Rigidbody2D>().linearVelocity.normalized;
+        Vector3 targetPos = new Vector3(targetVelocity.x,targetVelocity.y,0) + target.transform.position;
+        Move((targetPos-transform.position).normalized);
     }
 }
