@@ -40,4 +40,19 @@ public class Mushroom : Entity
                 break;
         }
     }
+
+    public void SetTask(Task task_)
+    {
+        task = task_;
+    }
+
+    public Task GetTask()
+    {
+        return task;
+    }
+
+    public Type GetMushroomType()
+    {
+        return mushroomType;
+    }
 }

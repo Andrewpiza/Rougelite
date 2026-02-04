@@ -97,8 +97,8 @@ public class Player : Entity
 
         foreach (Collider2D mushroom in list)
         {
-            // if not in squad
-            // Add mushroom to squad
+            Mushroom m = mushroom.GetComponent<Mushroom>();
+            if (m.GetTask() != Mushroom.Task.FollowPlayer)AddMushroomToSquad(m);   
         }
 
         if (currentWhistleSize < whistleMaxSize)
@@ -107,5 +107,11 @@ public class Player : Entity
             if (currentWhistleSize > whistleMaxSize)currentWhistleSize = whistleMaxSize;
             whistleObject.transform.localScale = new Vector3(currentWhistleSize,currentWhistleSize,1);
         }
+    }
+
+    public void AddMushroomToSquad(Mushroom mushroom)
+    {
+        mushroom.SetTask(Mushroom.Task.FollowPlayer);
+        mushroomSquad[(int)mushroom.GetMushroomType()].Add(mushroom.gameObject);
     }
 }
