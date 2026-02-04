@@ -570,9 +570,10 @@ MonoBehaviour:
   maxSpeed: 8
   attackDamage: 1
   attackRate: 1
+  throwMinDistance: 1
   throwMaxDistance: 8
   whistleMinSize: 1
-  whistleMaxSize: 3
+  whistleMaxSize: 12
 --- !u!58 &403706173
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -6791,7 +6792,7 @@ GameObject:
   - component: {fileID: 1584686888}
   - component: {fileID: 1584686887}
   - component: {fileID: 1584686886}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Red Mushroom
   m_TagString: Entity
   m_Icon: {fileID: 0}
