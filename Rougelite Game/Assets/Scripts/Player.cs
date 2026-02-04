@@ -114,4 +114,39 @@ public class Player : Entity
         mushroom.SetTask(Mushroom.Task.FollowPlayer);
         mushroomSquad[(int)mushroom.GetMushroomType()].Add(mushroom.gameObject);
     }
+
+    public void RemoveMushroomFromSquad(Mushroom mushroom)
+    {
+        mushroom.SetTask(Mushroom.Task.Idle);
+        int type = (int)mushroom.GetMushroomType();
+        mushroomSquad[type].Remove(mushroom.gameObject);
+
+        if ( mushroomSquad[type].Count == 0)
+        {
+            for (int i = type; i < mushroomSquad.Count; i++)
+            {
+                if (mushroomSquad[i].Count > 0)
+                {
+                    // Switch Type
+                    return;
+                }
+            }
+            for (int i = type; i == 0; i--)
+            {
+                if (mushroomSquad[i].Count > 0)
+                {
+                    // Switch Type
+                    return;
+                }
+            }
+        }
+    }
+
+    public void ThrowMushroom(Mushroom mushroom)
+    {
+        mushroom.SetTask(Mushroom.Task.Thrown);
+        mushroom.transform.position = transform.position;
+
+        // Add Force
+    }
 }

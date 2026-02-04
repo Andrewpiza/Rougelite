@@ -12,7 +12,8 @@ public class Mushroom : Entity
     public enum Task
     {
         Idle,
-        FollowPlayer
+        FollowPlayer,
+        Thrown
     }
     [SerializeField]private Type mushroomType;
 
