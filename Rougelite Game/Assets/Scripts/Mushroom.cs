@@ -5,6 +5,7 @@ public enum Type
     Red,
     Yellow,
     Blue,
+    COUNT
 }
 public class Mushroom : Entity
 {
