@@ -11,14 +11,14 @@ public class Player : Entity
     private Type selectedType;
 
     [Header("Throw")]
-    [SerializeField]private float throwMaxDistance = 10;
-    private GameObject throwTarget;
+    [SerializeField]private float throwMaxDistance = 8;
+    private GameObject throwObject;
 
     [Header("Whistle")]
     [SerializeField]private float whistleMinSize = 1;
     [SerializeField]private float whistleMaxSize = 3;
     private float currentWhistleSize = 1;
-    private GameObject whistle;
+    private GameObject whistleObject;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     new void Start()
@@ -30,7 +30,8 @@ public class Player : Entity
             mushroomSquad.Add(new List<GameObject>());
         }
 
-        throwTarget = GameObject.Find("Throw Target");
+        throwObject = transform.GetChild(0).gameObject;
+        whistleObject = transform.GetChild(1).gameObject;
         moveAction = InputSystem.actions.FindAction("Move");
         mouseAction = InputSystem.actions.FindAction("Point");
     }
@@ -43,12 +44,14 @@ public class Player : Entity
         Vector3 pos = Camera.main.ScreenToWorldPoint(mouseAction.ReadValue<Vector2>());
         pos += new Vector3(0,0,10);
 
-        if (Vector2.Distance(pos,transform.position) < throwMaxDistance)throwTarget.transform.position =pos;
+        if (Vector2.Distance(pos,transform.position) < throwMaxDistance)throwObject.transform.position =pos;
         else
         {
-            throwTarget.transform.position = transform.position + (pos-transform.position).normalized * throwMaxDistance;
+            throwObject.transform.position = transform.position + (pos-transform.position).normalized * throwMaxDistance;
         }
 
-        //whistle.transform.position = pos;
+        whistleObject.transform.position = pos;
+
+
     }
 }
