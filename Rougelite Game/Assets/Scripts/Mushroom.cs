@@ -13,13 +13,15 @@ public class Mushroom : Entity
     {
         Idle,
         FollowPlayer,
-        Thrown
+        Thrown,
+        AttackEnemy
     }
     [SerializeField]private Type mushroomType;
     
     // Other
     private Vector3 throwDirection;
     private GameObject player;
+    private GameObject target;
     [SerializeField]private Task task;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -42,6 +44,17 @@ public class Mushroom : Entity
                 break;
             case Task.Thrown:
                 if (Vector2.Distance(transform.position,throwDirection) < 0.2)rb.linearVelocity = Vector2.zero;
+                break;
+            case Task.AttackEnemy:
+                FollowTarget(target);
+
+                attackTimer += Time.deltaTime;
+                if (attackTimer >= attackRate && Vector2.Distance(transform.position,target.transform.position) < 1f)
+                {
+                    target.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    attackTimer = 0;
+                    if (target ==null)task = Task.Idle;
+                }
                 break;
         }
     }
@@ -67,5 +80,14 @@ public class Mushroom : Entity
     public Type GetMushroomType()
     {
         return mushroomType;
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.name == "Enemy")
+        {
+            task = Task.AttackEnemy;
+            target = coll.gameObject;
+        }
     }
 }

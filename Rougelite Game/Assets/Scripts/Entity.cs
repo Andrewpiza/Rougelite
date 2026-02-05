@@ -13,6 +13,7 @@ public class Entity : MonoBehaviour
     [Header("Attack")]
     [SerializeField]protected float attackDamage = 1;
     [SerializeField]protected float attackRate = 1;
+    protected float attackTimer;
 
     protected Rigidbody2D rb;
     
@@ -38,10 +39,16 @@ public class Entity : MonoBehaviour
         Move((pos-transform.position).normalized);
     }
 
-    public void FollowTarget(GameObject target, float bonusSpeed = 0)
+    public void FollowTarget(GameObject target, float bonusSpeed = 1)
     {
         Vector2 targetVelocity =target.GetComponent<Rigidbody2D>().linearVelocity.normalized;
         Vector3 targetPos = new Vector3(targetVelocity.x,targetVelocity.y,0) + target.transform.position;
         Move((targetPos-transform.position).normalized *bonusSpeed);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth < 0)Destroy(gameObject);
     }
 }
