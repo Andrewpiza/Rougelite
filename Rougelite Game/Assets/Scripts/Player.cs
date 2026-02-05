@@ -13,9 +13,11 @@ public class Player : Entity
     private Type selectedType;
 
     [Header("Throw")]
+    [SerializeField]private float throwStrength = 1000;
     [SerializeField]private float throwMinDistance = 1;
     [SerializeField]private float throwMaxDistance = 8;
     private GameObject throwObject;
+
 
     [Header("Whistle")]
     [SerializeField]private float whistleMinSize = 1;
@@ -31,7 +33,7 @@ public class Player : Entity
         base.Start();
 
         mushroomSquad = new List<List<GameObject>>();
-        for (int i = 0; i < (int)Type.COUNT; i++){
+        for (int i = 0; i < (int)Type.None+1; i++){
             mushroomSquad.Add(new List<GameObject>());
         }
 
@@ -45,6 +47,8 @@ public class Player : Entity
         mouseAction = InputSystem.actions.FindAction("Point");
         throwAction = InputSystem.actions.FindAction("Throw");
         whistleAction = InputSystem.actions.FindAction("Whistle");
+
+        SwitchTypeTo(Type.None);
     }
 
     // Update is called once per frame
@@ -116,6 +120,8 @@ public class Player : Entity
     {
         mushroom.SetTask(Mushroom.Task.FollowPlayer);
         mushroomSquad[(int)mushroom.GetMushroomType()].Add(mushroom.gameObject);
+
+        if (selectedType == Type.None)SwitchTypeTo(mushroom.GetMushroomType());
     }
 
     public void RemoveMushroomFromSquad(Mushroom mushroom)
@@ -142,17 +148,33 @@ public class Player : Entity
                     return;
                 }
             }
+            SwitchTypeTo(Type.None);
         }
     }
 
     public void ThrowMushroom(Mushroom mushroom)
     {
         mushroom.transform.position = transform.position;
-        mushroom.SetThrow(throwObject.transform.position,1000);
+        mushroom.SetThrow(throwObject.transform.position,throwStrength);
     }
 
     public void SwitchTypeTo(Type type)
     {
         selectedType = type;
+        switch (selectedType)
+        {
+            case Type.Red:
+                throwObject.GetComponent<SpriteRenderer>().color = new Color(1,0.1273585f,0.1273585f,0.4f);
+                break;
+            case Type.Yellow:
+                throwObject.GetComponent<SpriteRenderer>().color = new Color(1f,1f,0.08962262f,0.4f);
+                break;
+            case Type.Blue:
+                throwObject.GetComponent<SpriteRenderer>().color = new Color(0.240566f,0.240566f,1f,0.4f);
+                break;
+            case Type.None:
+                throwObject.GetComponent<SpriteRenderer>().color = new Color(0.3f,0.3f,0.3f,0.3f);
+                break;
+        }
     }
 }
