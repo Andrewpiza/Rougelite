@@ -8,6 +8,8 @@ public class Player : Entity
     InputAction mouseAction;
     InputAction throwAction;
     InputAction whistleAction;
+    InputAction switchNextAction;
+    InputAction switchBackAction;
 
     public List<List<GameObject>> mushroomSquad;
     private Type selectedType;
@@ -47,6 +49,8 @@ public class Player : Entity
         mouseAction = InputSystem.actions.FindAction("Point");
         throwAction = InputSystem.actions.FindAction("Throw");
         whistleAction = InputSystem.actions.FindAction("Whistle");
+        switchNextAction = InputSystem.actions.FindAction("SwitchTypeNext");
+        switchBackAction = InputSystem.actions.FindAction("SwitchTypeBack");
 
         SwitchTypeTo(Type.None);
     }
@@ -95,6 +99,20 @@ public class Player : Entity
         }
 
         if (isWhistling)Whistle();
+
+        // Switch
+        if (switchNextAction.WasPressedThisFrame())
+        {
+            selectedType++;
+            if (selectedType >= Type.None)selectedType = 0;
+            SwitchTypeTo(selectedType);
+        }
+        if (switchBackAction.WasPressedThisFrame())
+        {
+            selectedType--;
+            if (selectedType < 0)selectedType = Type.None-1;
+            SwitchTypeTo(selectedType);
+        }
 
     }
 
