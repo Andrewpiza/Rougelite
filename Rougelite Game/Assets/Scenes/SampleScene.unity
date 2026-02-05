@@ -570,6 +570,7 @@ MonoBehaviour:
   maxSpeed: 8
   attackDamage: 1
   attackRate: 1
+  throwStrength: 1000
   throwMinDistance: 1
   throwMaxDistance: 8
   whistleMinSize: 1
@@ -6876,7 +6877,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mushroom
   maxHealth: 100
   currentHealth: 0
-  speed: 1000
+  speed: 1100
   maxSpeed: 10
   attackDamage: 1
   attackRate: 1

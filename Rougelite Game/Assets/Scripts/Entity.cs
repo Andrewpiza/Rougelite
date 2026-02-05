@@ -38,10 +38,10 @@ public class Entity : MonoBehaviour
         Move((pos-transform.position).normalized);
     }
 
-    public void FollowTarget(GameObject target)
+    public void FollowTarget(GameObject target, float bonusSpeed = 0)
     {
         Vector2 targetVelocity =target.GetComponent<Rigidbody2D>().linearVelocity.normalized;
         Vector3 targetPos = new Vector3(targetVelocity.x,targetVelocity.y,0) + target.transform.position;
-        Move((targetPos-transform.position).normalized);
+        Move((targetPos-transform.position).normalized *bonusSpeed);
     }
 }

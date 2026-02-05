@@ -38,7 +38,7 @@ public class Mushroom : Entity
                 //
                 break;
             case Task.FollowPlayer:
-                FollowTarget(player);
+                FollowTarget(player,1.25f);
                 break;
             case Task.Thrown:
                 if (Vector2.Distance(transform.position,throwDirection) < 0.2)rb.linearVelocity = Vector2.zero;
