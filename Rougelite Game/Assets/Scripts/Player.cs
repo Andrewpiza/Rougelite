@@ -132,7 +132,7 @@ public class Player : Entity
 
         if ( mushroomSquad[type].Count == 0)
         {
-            for (int i = type; i < mushroomSquad.Count; i++)
+            for (int i = type+1; i < mushroomSquad.Count-1; i++)
             {
                 if (mushroomSquad[i].Count > 0)
                 {
@@ -140,7 +140,8 @@ public class Player : Entity
                     return;
                 }
             }
-            for (int i = type; i == 0; i--)
+            
+            for (int i = type-1; i >= 0; i--)
             {
                 if (mushroomSquad[i].Count > 0)
                 {
