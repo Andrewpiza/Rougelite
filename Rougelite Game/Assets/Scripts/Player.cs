@@ -68,12 +68,15 @@ public class Player : Entity
             {
                 if (Vector2.Distance(transform.position,mushroom.transform.position) < throwMinDistance)
                 {
-                    // Remove Mushroom From Squad
-                    // Throw Mushroom
+                    Mushroom m = mushroom.GetComponent<Mushroom>();
+                    RemoveMushroomFromSquad(m);
+                    ThrowMushroom(m);
+                    
                     break;
                 }
             }
         }
+
         // Whistle
         whistleObject.transform.position = pos;
         if (whistleAction.WasPressedThisFrame())
@@ -127,7 +130,7 @@ public class Player : Entity
             {
                 if (mushroomSquad[i].Count > 0)
                 {
-                    // Switch Type
+                    SwitchTypeTo((Type)i);
                     return;
                 }
             }
@@ -135,7 +138,7 @@ public class Player : Entity
             {
                 if (mushroomSquad[i].Count > 0)
                 {
-                    // Switch Type
+                    SwitchTypeTo((Type)i);
                     return;
                 }
             }
@@ -144,9 +147,12 @@ public class Player : Entity
 
     public void ThrowMushroom(Mushroom mushroom)
     {
-        mushroom.SetTask(Mushroom.Task.Thrown);
         mushroom.transform.position = transform.position;
+        mushroom.SetThrow(throwObject.transform.position,1000);
+    }
 
-        // Add Force
+    public void SwitchTypeTo(Type type)
+    {
+        selectedType = type;
     }
 }

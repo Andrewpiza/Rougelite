@@ -16,8 +16,9 @@ public class Mushroom : Entity
         Thrown
     }
     [SerializeField]private Type mushroomType;
-
+    
     // Other
+    private Vector3 throwDirection;
     private GameObject player;
     [SerializeField]private Task task;
 
@@ -39,12 +40,23 @@ public class Mushroom : Entity
             case Task.FollowPlayer:
                 FollowTarget(player);
                 break;
+            case Task.Thrown:
+                if (Vector2.Distance(transform.position,throwDirection) < 0.2)rb.linearVelocity = Vector2.zero;
+                break;
         }
     }
 
-    public void SetTask(Task task_)
+    public void SetThrow(Vector3 pos, float threwStrength)
     {
-        task = task_;
+        task = Task.Thrown;
+        throwDirection = pos;
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce((pos-transform.position).normalized*threwStrength);
+    }
+
+    public void SetTask(Task t)
+    {
+        task = t;
     }
 
     public Task GetTask()
