@@ -196,4 +196,24 @@ public class Player : Entity
                 break;
         }
     }
+
+    public List<GameObject> GetMushroomsInSquad()
+    {
+        List<GameObject> allMushrooms = new List<GameObject>();
+
+        foreach (List<GameObject> group in mushroomSquad)
+        {
+            foreach(GameObject mushroom in group)
+            {
+                allMushrooms.Add(mushroom);
+            }
+        }
+
+        return allMushrooms;
+    }
+
+    public Type GetSelectedType()
+    {
+        return selectedType;
+    }
 }

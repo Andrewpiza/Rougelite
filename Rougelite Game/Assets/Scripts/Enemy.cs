@@ -13,7 +13,7 @@ public class Enemy : Entity
     // Update is called once per frame
     void Update()
     {
-        if (target)FollowTarget(target);
+        if (target)Move(GetDirectionToTarget(target));
         else
         {
             foreach (GameObject entity in GameObject.FindGameObjectsWithTag("Entity"))

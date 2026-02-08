@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum Type
 {
@@ -19,6 +21,9 @@ public class Mushroom : Entity
     [SerializeField]private Type mushroomType;
     
     // Other
+    private float minDistanceFromPlayer = 1f;
+    [SerializeField]private float defaultDistanceFromPlayer = 1f;
+    [SerializeField]private float minDistanceFromMushrooms = 0.6f;
     private Vector3 throwDirection;
     private GameObject player;
     private GameObject target;
@@ -40,14 +45,13 @@ public class Mushroom : Entity
                 //
                 break;
             case Task.FollowPlayer:
-                FollowTarget(player,1.25f);
+                MoveTowardsPlayer();
                 break;
             case Task.Thrown:
                 if (Vector2.Distance(transform.position,throwDirection) < 0.2)rb.linearVelocity = Vector2.zero;
                 break;
             case Task.AttackEnemy:
-                FollowTarget(target);
-
+                Move(GetDirectionToTarget(target));
                 attackTimer += Time.deltaTime;
                 if (attackTimer >= attackRate && Vector2.Distance(transform.position,target.transform.position) < 1f)
                 {
@@ -57,6 +61,41 @@ public class Mushroom : Entity
                 }
                 break;
         }
+    }
+
+    public void MoveTowardsPlayer()
+    {
+        List<GameObject> allMushrooms = player.GetComponent<Player>().GetMushroomsInSquad();
+
+        minDistanceFromPlayer = defaultDistanceFromPlayer * (1+(allMushrooms.Count/10));
+
+        Vector2 moveDirection = Vector2.zero;
+        float distanceToPlayer = Vector2.Distance(transform.position,player.transform.position);
+        if ( distanceToPlayer > minDistanceFromPlayer || IsSelectedType() && distanceToPlayer > minDistanceFromPlayer/2) moveDirection = GetDirectionToTarget(player);
+
+        Vector2 directionToMushroom;
+        
+
+        foreach (GameObject mushroom in allMushrooms)
+        {
+            if (mushroom == gameObject)continue;
+            directionToMushroom = transform.position - mushroom.transform.position;
+
+            float distance = directionToMushroom.magnitude;
+
+            if (distance < minDistanceFromMushrooms && distance > 0 ){
+                moveDirection += directionToMushroom.normalized * (1- (distance/minDistanceFromMushrooms));
+            }
+        }
+
+        moveDirection = moveDirection.normalized;
+
+        Move(moveDirection);
+    }
+
+    public bool IsSelectedType()
+    {
+        return mushroomType == player.GetComponent<Player>().GetSelectedType();
     }
 
     public void SetThrow(Vector3 pos, float threwStrength)
@@ -84,7 +123,7 @@ public class Mushroom : Entity
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.name == "Enemy")
+        if (coll.gameObject.name == "Enemy" && task != Task.Idle)
         {
             task = Task.AttackEnemy;
             target = coll.gameObject;
